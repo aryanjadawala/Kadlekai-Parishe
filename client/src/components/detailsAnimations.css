@@ -1,0 +1,12 @@
+/* Smooth fade + slide from bottom */
+.animate-fade-slide-up {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: all 0.8s ease;
+}
+
+/* Initial hidden state */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+}

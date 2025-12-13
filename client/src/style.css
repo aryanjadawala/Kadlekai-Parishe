@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+.fade-slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlideUp 0.8s ease-out forwards;
+}
+
+.fade-slide-left {
+  opacity: 0;
+  transform: translateX(30px);
+  animation: fadeSlideLeft 0.9s ease-out forwards;
+}
+
+.fade-slide-right {
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: fadeSlideRight 0.9s ease-out forwards;
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeSlideRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

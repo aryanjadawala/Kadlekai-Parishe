@@ -1,0 +1,84 @@
+.comic-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: 180px;
+  gap: 12px;
+}
+
+/* Placeholder style */
+.thumb-placeholder {
+  background: #fef3c7; /* orange-100 */
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #444;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Hover overlay */
+.comic-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+
+.comic-item:hover {
+  transform: translateY(-4px);
+}
+
+.comic-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+.comic-item:hover .comic-overlay {
+  opacity: 1;
+}
+
+/* ✨ 20 random comic shapes */
+.comic-shape-1 { grid-column: span 2; grid-row: span 2; }
+.comic-shape-2 { grid-column: span 1; grid-row: span 3; }
+.comic-shape-3 { grid-column: span 3; grid-row: span 2; }
+.comic-shape-4 { grid-column: span 2; grid-row: span 1; }
+.comic-shape-5 { grid-column: span 2; grid-row: span 2; }
+.comic-shape-6 { grid-column: span 1; grid-row: span 2; }
+.comic-shape-7 { grid-column: span 3; grid-row: span 3; }
+.comic-shape-8 { grid-column: span 2; grid-row: span 1; }
+.comic-shape-9 { grid-column: span 4; grid-row: span 2; }
+.comic-shape-10 { grid-column: span 2; grid-row: span 3; }
+
+.comic-shape-11 { grid-column: span 1; grid-row: span 2; }
+.comic-shape-12 { grid-column: span 3; grid-row: span 1; }
+.comic-shape-13 { grid-column: span 2; grid-row: span 2; }
+.comic-shape-14 { grid-column: span 1; grid-row: span 3; }
+.comic-shape-15 { grid-column: span 3; grid-row: span 2; }
+.comic-shape-16 { grid-column: span 2; grid-row: span 2; }
+.comic-shape-17 { grid-column: span 1; grid-row: span 2; }
+.comic-shape-18 { grid-column: span 3; grid-row: span 3; }
+.comic-shape-19 { grid-column: span 2; grid-row: span 1; }
+.comic-shape-20 { grid-column: span 4; grid-row: span 2; }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .comic-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .comic-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 160px;
+  }
+}
