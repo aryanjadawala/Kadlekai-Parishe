@@ -115,13 +115,14 @@ export default function DetailsSection() {
           </p>
 
           <a
-            href="#"
+            href="https://www.google.com/maps/d/view?mid=1GSw_Q0Zf0fm0G0F58-EgPhY9sIcGrU4" target="_blank"
+            rel="noopener noreferrer"
             className="
               px-6 py-3 bg-white text-orange-600 font-semibold rounded-full shadow 
               hover:bg-gray-100 transition 
             "
           >
-            Download Map
+            View/Download Map
           </a>
         </div>
 
