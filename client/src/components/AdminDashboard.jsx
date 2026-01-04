@@ -5,6 +5,7 @@ import DashboardOverview from './admin/DashboardOverview';
 import VendorManagement from './admin/VendorManagement';
 import VolunteerManagement from './admin/VolunteerManagement';
 import Analytics from './admin/Analytics';
+import ParkingManagement from './admin/ParkingManagement';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -30,6 +31,7 @@ export default function AdminDashboard() {
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'vendors', label: 'Vendors', icon: '🏪' },
     { id: 'volunteers', label: 'Volunteers', icon: '🙋' },
+    { id: 'parking', label: 'Parking', icon: '🅿️' },
     { id: 'analytics', label: 'Analytics', icon: '📈' },
   ];
 
@@ -41,6 +43,8 @@ export default function AdminDashboard() {
         return <VendorManagement onUpdate={fetchDashboardStats} />;
       case 'volunteers':
         return <VolunteerManagement onUpdate={fetchDashboardStats} />;
+      case 'parking':
+        return <ParkingManagement onUpdate={fetchDashboardStats} />;
       case 'analytics':
         return <Analytics stats={stats} />;
       default:
