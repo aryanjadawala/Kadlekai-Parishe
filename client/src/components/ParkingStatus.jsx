@@ -39,7 +39,7 @@ export default function ParkingStatus() {
   }
 
   return (
-    <div className="bg-gray-50 py-12">
+    <div className="bg-gray-50 py-12 pt-24">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
