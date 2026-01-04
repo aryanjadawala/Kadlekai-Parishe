@@ -8,6 +8,8 @@ import vendorRoutes from './routes/vendorRoutes.js';
 import volunteerRoutes from './routes/volunteerRoutes.js';
 import parkingRoutes from './routes/parkingRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -38,6 +40,8 @@ app.use('/api/vendors', vendorRoutes);
 app.use('/api/volunteers', volunteerRoutes);
 app.use('/api/parking', parkingRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/reports', reportRoutes);
 
 // Root route
 app.get('/', (req, res) => {

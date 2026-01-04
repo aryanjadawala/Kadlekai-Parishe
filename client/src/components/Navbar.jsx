@@ -28,6 +28,14 @@ export default function Navbar({ activeSection, setActiveSection }) {
           </li>
           <li>
             <button 
+              onClick={() => handleNavClick('vendors')}
+              className={`hover:text-orange-400 transition fade-slide-up ${activeSection === 'vendors' ? 'text-orange-400' : ''}`}
+            >
+              Vendors
+            </button>
+          </li>
+          <li>
+            <button 
               onClick={() => handleNavClick('team')}
               className={`hover:text-orange-400 transition fade-slide-up ${activeSection === 'team' ? 'text-orange-400' : ''}`}
             >

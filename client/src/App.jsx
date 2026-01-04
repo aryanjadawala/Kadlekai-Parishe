@@ -11,12 +11,15 @@ import VolunteerForm from './components/VolunteerForm';
 import ParkingStatus from './components/ParkingStatus';
 import AdminDashboard from './components/AdminDashboard';
 import VolunteerProfiles from './components/VolunteerProfiles';
+import VendorsPage from './components/VendorsPage';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
 
   const renderContent = () => {
     switch (activeSection) {
+      case 'vendors':
+        return <VendorsPage />;
       case 'vendor':
         return (
           <section className="py-16 bg-gray-50">
@@ -56,7 +59,7 @@ function App() {
     <div className="App">
       <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
       {renderContent()}
-      {activeSection !== 'admin' && activeSection !== 'team' && <Footer />}
+      {activeSection !== 'admin' && activeSection !== 'team' && activeSection !== 'vendors' && <Footer />}
     </div>
   );
 }

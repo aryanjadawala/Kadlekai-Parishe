@@ -41,6 +41,11 @@ const vendorSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  productPhoto: {
+    type: String,
+    trim: true,
+    default: 'https://via.placeholder.com/400x300?text=No+Product+Image'
+  },
   gstNumber: {
     type: String,
     trim: true
