@@ -7,6 +7,7 @@ import {
   deleteVendor,
   getVendorStats
 } from '../controllers/vendorController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getVendor)
-  .put(updateVendor)
-  .delete(deleteVendor);
+  .put(protect, updateVendor)  // Admin only
+  .delete(protect, deleteVendor);  // Admin only
 
 export default router;

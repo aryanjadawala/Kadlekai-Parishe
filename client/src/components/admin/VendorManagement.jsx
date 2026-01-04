@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Pencil, Trash2, X } from 'lucide-react';
 import { vendorAPI } from '../../api';
 import adminAPI from '../../api/admin';
 
@@ -8,6 +9,8 @@ export default function VendorManagement({ onUpdate }) {
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [selectedVendor, setSelectedVendor] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState(null);
 
   useEffect(() => {
     fetchVendors();
@@ -34,6 +37,59 @@ export default function VendorManagement({ onUpdate }) {
       alert(`Vendor ${status} successfully!`);
     } catch (error) {
       alert('Error updating vendor status: ' + error.message);
+    }
+  };
+
+  const handleEdit = (vendor) => {
+    setEditData({
+      ...vendor,
+      address: vendor.address || { street: '', city: '', state: '', pincode: '' }
+    });
+    setEditMode(true);
+    setSelectedVendor(null);
+  };
+
+  const handleEditChange = (field, value) => {
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      setEditData(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setEditData(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      await vendorAPI.update(editData._id, editData);
+      fetchVendors();
+      onUpdate();
+      setEditMode(false);
+      setEditData(null);
+      alert('Vendor updated successfully!');
+    } catch (error) {
+      alert('Error updating vendor: ' + error.message);
+    }
+  };
+
+  const handleDelete = async (vendorId, vendorName) => {
+    if (!confirm(`Are you sure you want to delete "${vendorName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await vendorAPI.delete(vendorId);
+      fetchVendors();
+      onUpdate();
+      setSelectedVendor(null);
+      alert('Vendor deleted successfully!');
+    } catch (error) {
+      alert('Error deleting vendor: ' + error.message);
     }
   };
 
@@ -139,8 +195,23 @@ export default function VendorManagement({ onUpdate }) {
                     <button
                       onClick={() => setSelectedVendor(vendor)}
                       className="text-orange-600 hover:text-orange-900 mr-3"
+                      title="View Details"
                     >
                       View
+                    </button>
+                    <button
+                      onClick={() => handleEdit(vendor)}
+                      className="text-blue-600 hover:text-blue-900 mr-3"
+                      title="Edit"
+                    >
+                      <Pencil className="w-4 h-4 inline" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(vendor._id, vendor.businessName)}
+                      className="text-red-600 hover:text-red-900 mr-3"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-4 h-4 inline" />
                     </button>
                     {vendor.status === 'pending' && (
                       <>
@@ -186,9 +257,19 @@ export default function VendorManagement({ onUpdate }) {
                 onClick={() => setSelectedVendor(null)}
                 className="text-gray-400 hover:text-gray-600"
               >
-                ✕
+                <X className="w-6 h-6" />
               </button>
             </div>
+
+            {selectedVendor.productPhoto && (
+              <div className="mb-4">
+                <img 
+                  src={selectedVendor.productPhoto} 
+                  alt={selectedVendor.businessName}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              </div>
+            )}
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -212,14 +293,37 @@ export default function VendorManagement({ onUpdate }) {
                   <label className="text-sm font-medium text-gray-500">Email</label>
                   <p className="text-gray-900">{selectedVendor.email}</p>
                 </div>
+                {selectedVendor.stallNumber && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-500">Stall Number</label>
+                    <p className="text-gray-900">{selectedVendor.stallNumber}</p>
+                  </div>
+                )}
                 <div className="col-span-2">
                   <label className="text-sm font-medium text-gray-500">Product Description</label>
                   <p className="text-gray-900">{selectedVendor.productDescription || 'N/A'}</p>
                 </div>
               </div>
 
+              <div className="flex gap-4 pt-6 border-t">
+                <button
+                  onClick={() => handleEdit(selectedVendor)}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
+                >
+                  <Pencil className="w-4 h-4" />
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(selectedVendor._id, selectedVendor.businessName)}
+                  className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Delete
+                </button>
+              </div>
+
               {selectedVendor.status === 'pending' && (
-                <div className="flex gap-4 pt-6 border-t">
+                <div className="flex gap-4 pt-4">
                   <button
                     onClick={() => handleStatusUpdate(selectedVendor._id, 'approved')}
                     className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
@@ -228,12 +332,191 @@ export default function VendorManagement({ onUpdate }) {
                   </button>
                   <button
                     onClick={() => handleStatusUpdate(selectedVendor._id, 'rejected')}
-                    className="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+                    className="flex-1 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700"
                   >
                     ❌ Reject
                   </button>
                 </div>
               )}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Edit Vendor Modal */}
+      {editMode && editData && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex justify-between items-start mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Edit Vendor</h2>
+              <button
+                onClick={() => { setEditMode(false); setEditData(null); }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Photo URL
+                  </label>
+                  <input
+                    type="text"
+                    value={editData.productPhoto || ''}
+                    onChange={(e) => handleEditChange('productPhoto', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  {editData.productPhoto && (
+                    <img 
+                      src={editData.productPhoto} 
+                      alt="Preview"
+                      className="mt-2 w-full h-32 object-cover rounded-lg"
+                      onError={(e) => e.target.style.display = 'none'}
+                    />
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Business Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={editData.businessName}
+                    onChange={(e) => handleEditChange('businessName', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Owner Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={editData.name}
+                    onChange={(e) => handleEditChange('name', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Category *
+                  </label>
+                  <select
+                    value={editData.productCategory}
+                    onChange={(e) => handleEditChange('productCategory', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    <option value="Groundnuts">Groundnuts</option>
+                    <option value="Food">Food</option>
+                    <option value="Bangles">Bangles</option>
+                    <option value="Toys">Toys</option>
+                    <option value="Wooden Works">Wooden Works</option>
+                    <option value="Decorative Items">Decorative Items</option>
+                    <option value="Handicrafts">Handicrafts</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Religious Items">Religious Items</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Stall Number
+                  </label>
+                  <input
+                    type="text"
+                    value={editData.stallNumber || ''}
+                    onChange={(e) => handleEditChange('stallNumber', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    placeholder="A-101"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Contact Number *
+                  </label>
+                  <input
+                    type="tel"
+                    value={editData.contactNumber}
+                    onChange={(e) => handleEditChange('contactNumber', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    value={editData.email}
+                    onChange={(e) => handleEditChange('email', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Description
+                  </label>
+                  <textarea
+                    value={editData.productDescription || ''}
+                    onChange={(e) => handleEditChange('productDescription', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                    placeholder="Describe your products..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Status
+                  </label>
+                  <select
+                    value={editData.status}
+                    onChange={(e) => handleEditChange('status', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-4 pt-6 border-t">
+                <button
+                  onClick={() => { setEditMode(false); setEditData(null); }}
+                  className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveEdit}
+                  className="flex-1 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
