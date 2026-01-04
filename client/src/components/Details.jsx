@@ -1,43 +1,30 @@
 // client/src/components/DetailsSection.jsx
-import React, { useEffect } from "react";
-import "./detailsAnimations.css"; // <-- custom CSS animations
+import React from "react";
+import { motion } from "framer-motion";
 
 export default function DetailsSection() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-slide-up");
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    document
-      .querySelectorAll(".animate-on-scroll")
-      .forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section id="details" className="bg-orange-100 py-16">
+    <section id="details" className="bg-white py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Title */}
-        <div className="text-center animate-on-scroll opacity-0">
-          <h2 className="text-4xl font-extrabold text-black mb-2">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <h2 className="text-4xl font-bold text-gray-900 mb-3">
             Visitor Information
           </h2>
-          <p className="text-gray-700 mb-10">
+          <p className="text-gray-600 text-lg mb-12">
             Everything you need to know before visiting Kadlekai Parishe
           </p>
-        </div>
+        </motion.div>
 
         {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
           {/* CARD TEMPLATE */}
           {[
@@ -79,52 +66,50 @@ export default function DetailsSection() {
               ],
             },
           ].map((card, index) => (
-            <div
+            <motion.div
               key={index}
-              className="
-                bg-white p-6 rounded-xl shadow-lg 
-                transition transform hover:-translate-y-1 hover:shadow-xl 
-                animate-on-scroll opacity-0
-              "
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              className="bg-gray-50 p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg hover:border-orange-300 transition-all duration-300"
             >
-              <div className="text-orange-500 text-3xl mb-4">
+              <div className="text-orange-600 text-3xl mb-4">
                 <i className={`fa-solid ${card.icon}`}></i>
               </div>
 
-              <h3 className="font-bold text-lg mb-1">{card.title}</h3>
+              <h3 className="font-semibold text-lg text-gray-900 mb-2">{card.title}</h3>
 
               {card.text.map((line, i) => (
-                <p key={i} className="text-gray-700">{line}</p>
+                <p key={i} className="text-gray-600 text-sm">{line}</p>
               ))}
-            </div>
+            </motion.div>
           ))}
 
         </div>
 
         {/* CTA */}
-        <div
-          className="
-            mt-16 bg-gradient-to-r from-orange-500 to-orange-600
-            text-white p-10 rounded-2xl shadow-xl text-center
-            animate-on-scroll opacity-0
-          "
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-16 bg-gradient-to-r from-orange-600 to-orange-700 text-white p-10 rounded-2xl shadow-2xl text-center"
         >
-          <h3 className="text-3xl font-bold mb-2">COME JOIN THE CELEBRATION!!</h3>
-          <p className="text-white/90 mb-6">
+          <h3 className="text-3xl font-bold mb-3">Come Join The Celebration!</h3>
+          <p className="text-gray-100 text-lg mb-6">
             The fair is held annually in November. Check our updates for exact dates.
           </p>
 
           <a
-            href="https://www.google.com/maps/d/view?mid=1GSw_Q0Zf0fm0G0F58-EgPhY9sIcGrU4" target="_blank"
+            href="https://www.google.com/maps/d/view?mid=1GSw_Q0Zf0fm0G0F58-EgPhY9sIcGrU4" 
+            target="_blank"
             rel="noopener noreferrer"
-            className="
-              px-6 py-3 bg-white text-orange-600 font-semibold rounded-full shadow 
-              hover:bg-gray-100 transition 
-            "
+            className="px-8 py-3 bg-white text-orange-600 font-semibold rounded-lg shadow-lg hover:bg-gray-50 hover:shadow-xl transition-all duration-300"
           >
             View/Download Map
           </a>
-        </div>
+        </motion.div>
 
       </div>
     </section>

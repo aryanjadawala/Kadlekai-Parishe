@@ -10,7 +10,7 @@ const parkingSchema = new mongoose.Schema({
   zone: {
     type: String,
     required: [true, 'Parking zone is required'],
-    enum: ['Zone A', 'Zone B', 'Zone C', 'Zone D', 'VIP Zone', 'Two Wheeler Zone', 'Four Wheeler Zone'],
+    enum: ['Zone A', 'Zone B', 'Zone C', 'VIP Zone', 'Two Wheeler Zone', 'Four Wheeler Zone'],
     trim: true
   },
   vehicleType: {

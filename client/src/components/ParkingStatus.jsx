@@ -108,7 +108,7 @@ export default function ParkingStatus() {
         {/* Zone Filter */}
         <div className="mb-6 flex justify-center">
           <div className="inline-flex rounded-lg shadow-sm">
-            {['all', 'Zone A', 'Zone B', 'Zone C', 'Zone D', 'VIP Zone'].map((zone) => (
+            {['all', 'Zone A', 'Zone B', 'Zone C', 'VIP Zone'].map((zone) => (
               <button
                 key={zone}
                 onClick={() => setSelectedZone(zone)}

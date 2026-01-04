@@ -1,26 +1,32 @@
 // client/src/components/InfoHistory.jsx
 import React from "react";
+import { motion } from "framer-motion";
 
 export default function InfoHistory() {
   return (
     <section
       id="info"
-      className="py-16 bg-orange-100 text-gray-900"
+      className="py-16 bg-gray-50"
       aria-labelledby="info-heading"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text */}
-          <div className="order-2 lg:order-1">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="order-2 lg:order-1"
+          >
             <h2
               id="info-heading"
-              className="text-4xl font-extrabold text-black mb-4"
-              style={{ letterSpacing: "-0.02em" }}
+              className="text-4xl font-bold text-gray-900 mb-4"
             >
               A Festival Of Heritage
             </h2>
 
-            <p className="text-lg text-gray-800 leading-relaxed mb-6">
+            <p className="text-lg text-gray-700 leading-relaxed mb-6">
               Kadalekai Parishe — the annual groundnut fair of Basavanagudi — traces its
               origins to a centuries-old local legend: farmers offered their first
               groundnut harvest to Nandi (Basavanna) after a mysterious episode involving
@@ -35,38 +41,44 @@ export default function InfoHistory() {
               measures to reduce single-use plastics.
             </p>
 
-            <div className="flex flex-wrap gap-3 items-center">
+            <div className="flex flex-wrap gap-4 items-center">
               <a
                 href="#map"
-                className="inline-flex items-center gap-2 px-5 py-3 bg-orange-500 text-white rounded-full shadow hover:bg-orange-600 transition"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700 hover:shadow-lg transition-all duration-300"
               >
                 Explore Map
               </a>
 
               <a
                 href="#gallery"
-                className="inline-flex items-center gap-2 px-5 py-3 bg-white text-gray-900 rounded-full shadow border border-gray-200 hover:bg-gray-50 transition"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 rounded-lg shadow-md border border-gray-300 hover:bg-gray-50 hover:shadow-lg transition-all duration-300"
               >
                 View Gallery
               </a>
             </div>
 
             {/* Small source attribution (compact) */}
-            <div className="mt-6 text-xs text-gray-500">
+            <div className="mt-6 text-sm text-gray-500">
               Sources: Karnataka Tourism, Incredible India, local news coverage.
             </div>
-          </div>
+          </motion.div>
 
           {/* Right: Image */}
-          <div className="order-1 lg:order-2">
-            <div className="rounded-xl overflow-hidden shadow-xl">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="order-1 lg:order-2"
+          >
+            <div className="rounded-2xl overflow-hidden shadow-2xl">
               <img
                 src="/history.png"
                 alt="Festival crowd and stalls"
-                className="w-full h-80 object-cover sm:h-96"
+                className="w-full h-80 object-cover sm:h-96 hover:scale-105 transition-transform duration-500"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

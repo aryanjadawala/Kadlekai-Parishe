@@ -1,4 +1,5 @@
 import { MapPin, Camera } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
@@ -11,35 +12,57 @@ export default function Hero() {
       }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/50"></div>
 
       {/* LEFT CONTENT */}
-      <div className="relative z-10 max-w-3xl px-10 md:px-20 fade-slide-left">
-        <h1 className="text-white shadow-3xl text-5xl md:text-7xl font-extrabold leading-tight fade-slide-up">
+      <motion.div 
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-10 max-w-3xl px-10 md:px-20"
+      >
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-white text-5xl md:text-7xl font-bold leading-tight"
+        >
           Kadlekai Parishe
-        </h1>
+        </motion.h1>
 
-        <p className="text-orange-50  shadow-black text-lg md:text-2xl mt-4 max-w-xl fade-slide-up">
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-gray-100 text-lg md:text-2xl mt-4 max-w-xl"
+        >
           Experience 500 years of tradition at Bangalore's iconic groundnut fair.
-        </p>
+        </motion.p>
 
         {/* CTA BUTTONS */}
-        <div className="mt-8 flex flex-wrap gap-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="mt-8 flex flex-wrap gap-4"
+        >
           <a
             href="#map"
-            className="bg-orange-500 hover:bg-orange-600 transition text-white font-semibold px-8 py-4 rounded-full flex items-center gap-3 text-lg shadow-lg fade-slide-up"
+            className="bg-orange-600 hover:bg-orange-700 transition-all duration-300 text-white font-semibold px-8 py-3 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-xl"
           >
-            Explore Map <MapPin size={22} />
+            <MapPin size={20} />
+            Explore Map
           </a>
 
           <a
             href="#gallery"
-            className="bg-white hover:bg-gray-100 transition text-gray-900 font-semibold px-8 py-4 rounded-full flex items-center gap-3 text-lg shadow-lg fade-slide-up"
+            className="bg-white hover:bg-gray-50 transition-all duration-300 text-gray-900 font-semibold px-8 py-3 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-xl"
           >
-            View Gallery <Camera size={22} />
+            <Camera size={20} />
+            View Gallery
           </a>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
