@@ -7,8 +7,12 @@ import {
   getRecentActivities,
   getFootfallAnalytics
 } from '../controllers/adminController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Apply authentication middleware to all routes
+router.use(protect);
 
 // Dashboard stats
 router.get('/stats', getDashboardStats);

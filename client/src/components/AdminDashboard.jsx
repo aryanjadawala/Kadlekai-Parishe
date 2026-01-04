@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { LogOut } from 'lucide-react';
 import adminAPI from '../api/admin';
 import DashboardOverview from './admin/DashboardOverview';
 import VendorManagement from './admin/VendorManagement';
@@ -12,10 +13,50 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [adminData, setAdminData] = useState(null);
 
   useEffect(() => {
+    // Check authentication
+    const token = localStorage.getItem('adminToken');
+    const storedAdminData = localStorage.getItem('adminData');
+    
+    if (!token) {
+      window.dispatchEvent(new CustomEvent('navigate', { detail: 'admin-login' }));
+      return;
+    }
+
+    if (storedAdminData) {
+      setAdminData(JSON.parse(storedAdminData));
+    }
+
+    verifyToken(token);
     fetchDashboardStats();
   }, []);
+
+  const verifyToken = async (token) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/verify', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid token');
+      }
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminData');
+      window.dispatchEvent(new CustomEvent('navigate', { detail: 'admin-login' }));
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminData');
+    window.dispatchEvent(new CustomEvent('navigate', { detail: 'admin-login' }));
+  };
 
   const fetchDashboardStats = async () => {
     try {
@@ -71,14 +112,25 @@ export default function AdminDashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-8 flex justify-between items-center"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Admin Dashboard
-          </h1>
-          <p className="text-gray-600">
-            Manage vendors, volunteers, and view festival analytics
-          </p>
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-600">
+              {adminData && `Welcome, ${adminData.name}`} | Manage vendors, volunteers, and view festival analytics
+            </p>
+          </div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </motion.button>
         </motion.div>
 
         {/* Tabs */}

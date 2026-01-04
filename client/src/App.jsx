@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import MapSection from './components/MapSection';
@@ -10,11 +10,25 @@ import VendorForm from './components/VendorForm';
 import VolunteerForm from './components/VolunteerForm';
 import ParkingStatus from './components/ParkingStatus';
 import AdminDashboard from './components/AdminDashboard';
+import AdminLogin from './components/AdminLogin';
 import VolunteerProfiles from './components/VolunteerProfiles';
 import VendorsPage from './components/VendorsPage';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
+
+  useEffect(() => {
+    // Listen for navigation events
+    const handleNavigate = (event) => {
+      setActiveSection(event.detail);
+    };
+
+    window.addEventListener('navigate', handleNavigate);
+
+    return () => {
+      window.removeEventListener('navigate', handleNavigate);
+    };
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -38,6 +52,8 @@ function App() {
         );
       case 'parking':
         return <ParkingStatus />;
+      case 'admin-login':
+        return <AdminLogin />;
       case 'admin':
         return <AdminDashboard />;
       case 'team':
@@ -57,9 +73,9 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
+      {activeSection !== 'admin-login' && <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />}
       {renderContent()}
-      {activeSection !== 'admin' && activeSection !== 'team' && activeSection !== 'vendors' && <Footer />}
+      {activeSection !== 'admin' && activeSection !== 'admin-login' && activeSection !== 'team' && activeSection !== 'vendors' && <Footer />}
     </div>
   );
 }

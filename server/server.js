@@ -10,6 +10,7 @@ import parkingRoutes from './routes/parkingRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -36,12 +37,15 @@ app.use((req, res, next) => {
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/volunteers', volunteerRoutes);
 app.use('/api/parking', parkingRoutes);
-app.use('/api/admin', adminRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/reports', reportRoutes);
+
+// Protected admin routes
+app.use('/api/admin', adminRoutes);
 
 // Root route
 app.get('/', (req, res) => {
